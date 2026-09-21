@@ -1,0 +1,545 @@
+/* ═══════════════════════════════════════════
+   WEATHER APP — STYLES
+   ═══════════════════════════════════════════ */
+
+/* ── Reset & Base ── */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    overflow: hidden;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    transition: background 1s ease;
+}
+
+/* ── Theme Backgrounds ── */
+body.sunny {
+    background: linear-gradient(135deg, #f6d365 0%, #fda085 50%, #f093fb 100%);
+}
+
+body.cloudy {
+    background: linear-gradient(135deg, #bdc3c7 0%, #606c88 50%, #3f4c6b 100%);
+}
+
+body.rainy {
+    background: linear-gradient(135deg, #4b6cb7 0%, #182848 100%);
+}
+
+body.night {
+    background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+}
+
+body.snow {
+    background: linear-gradient(135deg, #e6dada 0%, #274046 100%);
+}
+
+body.haze {
+    background: linear-gradient(135deg, #c9d6ff 0%, #e2e2e2 100%);
+    color: #333;
+}
+
+/* ── Vignette Overlay ── */
+body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(circle at center, transparent 40%, rgba(0, 0, 0, 0.2));
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* ── Light Overlay ── */
+.light-overlay {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    transition: background 0.8s ease;
+    z-index: 1;
+}
+
+.light-clear {
+    background: radial-gradient(circle at top, rgba(255, 214, 102, 0.3), transparent 60%);
+}
+
+.light-clouds {
+    background: radial-gradient(circle at top, rgba(200, 200, 200, 0.2), transparent 65%);
+}
+
+.light-rain {
+    background: radial-gradient(circle at top, rgba(100, 140, 200, 0.2), transparent 70%);
+}
+
+/* ── Floating Clouds ── */
+.cloud-layer {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 2;
+}
+
+.cloud {
+    position: absolute;
+    width: 300px;
+    height: 140px;
+    background: radial-gradient(circle at 40% 40%,
+            rgba(255, 255, 255, 0.35),
+            rgba(255, 255, 255, 0.05) 70%);
+    filter: blur(40px);
+    border-radius: 50%;
+    animation: floatClouds 160s linear infinite;
+}
+
+.c1 {
+    top: 5%;
+    left: -30%;
+    animation-duration: 160s;
+}
+
+.c2 {
+    top: 25%;
+    left: 70%;
+    animation-duration: 200s;
+    animation-delay: -60s;
+}
+
+.c3 {
+    top: 55%;
+    left: -20%;
+    animation-duration: 240s;
+    animation-delay: -120s;
+}
+
+@keyframes floatClouds {
+    from {
+        transform: translateX(-10vw);
+    }
+
+    to {
+        transform: translateX(110vw);
+    }
+}
+
+/* ── App Container ── */
+.app {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    max-width: 440px;
+    padding: 20px;
+}
+
+/* ── Glassmorphic Card ── */
+.card {
+    position: relative;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 28px;
+    padding: 32px 28px;
+    box-shadow:
+        0 8px 32px rgba(0, 0, 0, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+    opacity: 0;
+    transform: translateY(30px);
+}
+
+.card.visible {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.card:hover {
+    transform: translateY(-4px);
+    box-shadow:
+        0 12px 40px rgba(0, 0, 0, 0.25),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+/* Glass highlight layer */
+.card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 50%;
+    border-radius: 28px 28px 0 0;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.1), transparent);
+    pointer-events: none;
+}
+
+/* ── App Title ── */
+.app-title {
+    text-align: center;
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 24px;
+    letter-spacing: 0.5px;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* ── Search Bar ── */
+.search {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 28px;
+}
+
+.search input {
+    flex: 1;
+    padding: 14px 18px;
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    color: #fff;
+    font-size: 15px;
+    outline: none;
+    transition: background 0.3s ease, border-color 0.3s ease;
+}
+
+.search input::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.search input:focus {
+    background: rgba(255, 255, 255, 0.3);
+    border-color: rgba(255, 255, 255, 0.4);
+}
+
+.search button {
+    padding: 14px 18px;
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(10px);
+    color: #fff;
+    font-size: 18px;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.search button:hover {
+    background: rgba(255, 255, 255, 0.35);
+    transform: scale(1.05);
+}
+
+.search button:active {
+    transform: scale(0.95);
+}
+
+/* ── Loading Spinner ── */
+.loading {
+    display: none;
+    text-align: center;
+    padding: 40px 0;
+}
+
+.loading.active {
+    display: block;
+}
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid rgba(255, 255, 255, 0.2);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin: 0 auto 12px;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.loading-text {
+    font-size: 14px;
+    opacity: 0.7;
+}
+
+/* ── Error Message ── */
+.error-msg {
+    display: none;
+    text-align: center;
+    padding: 20px;
+    background: rgba(255, 80, 80, 0.2);
+    border: 1px solid rgba(255, 80, 80, 0.3);
+    border-radius: 14px;
+    font-size: 14px;
+    margin-bottom: 16px;
+}
+
+.error-msg.active {
+    display: block;
+    animation: shakeIn 0.4s ease;
+}
+
+@keyframes shakeIn {
+    0%, 100% { transform: translateX(0); }
+    20% { transform: translateX(-8px); }
+    40% { transform: translateX(8px); }
+    60% { transform: translateX(-4px); }
+    80% { transform: translateX(4px); }
+}
+
+/* ── Weather Display ── */
+.weather {
+    text-align: center;
+    display: none;
+}
+
+.weather.active {
+    display: block;
+}
+
+.weather-icon {
+    font-size: 72px;
+    line-height: 1;
+    margin-bottom: 8px;
+    display: inline-block;
+    animation: iconFloat 3s ease-in-out infinite;
+}
+
+.weather-icon.pulse {
+    animation: iconPulse 0.5s ease;
+}
+
+@keyframes iconFloat {
+    0%, 100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-8px);
+    }
+}
+
+@keyframes iconPulse {
+    0% {
+        transform: scale(0.5);
+        opacity: 0;
+    }
+
+    50% {
+        transform: scale(1.2);
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.city-name {
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 4px;
+    min-height: 32px;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.city-name .cursor {
+    display: inline-block;
+    width: 2px;
+    height: 24px;
+    background: #fff;
+    margin-left: 2px;
+    vertical-align: text-bottom;
+    animation: blink 0.6s step-end infinite;
+}
+
+@keyframes blink {
+    50% {
+        opacity: 0;
+    }
+}
+
+.temperature {
+    font-size: 80px;
+    font-weight: 800;
+    letter-spacing: -3px;
+    line-height: 1;
+    margin: 8px 0;
+    text-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.condition {
+    font-size: 16px;
+    opacity: 0.85;
+    margin-bottom: 24px;
+    text-transform: capitalize;
+}
+
+/* ── Stat Cards (humidity & wind) ── */
+.stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 28px;
+}
+
+.stat-card {
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 16px;
+    padding: 14px 12px;
+    text-align: center;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.stat-card.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.stat-card .stat-label {
+    font-size: 12px;
+    opacity: 0.7;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.stat-card .stat-value {
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.stat-card .stat-icon {
+    font-size: 20px;
+    margin-bottom: 4px;
+}
+
+/* ── Forecast Section ── */
+.forecast-section {
+    display: none;
+}
+
+.forecast-section.active {
+    display: block;
+}
+
+.forecast-title {
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    opacity: 0.7;
+    margin-bottom: 14px;
+}
+
+.forecast-row {
+    display: flex;
+    gap: 8px;
+    justify-content: space-between;
+}
+
+.forecast-card {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 14px;
+    padding: 12px 6px;
+    text-align: center;
+    opacity: 0;
+    transform: translateY(15px);
+    transition: opacity 0.4s ease, transform 0.4s ease, background 0.3s ease;
+}
+
+.forecast-card.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.forecast-card:hover {
+    background: rgba(255, 255, 255, 0.22);
+}
+
+.forecast-card .fc-day {
+    font-size: 11px;
+    font-weight: 600;
+    opacity: 0.7;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+}
+
+.forecast-card .fc-icon {
+    font-size: 24px;
+    margin-bottom: 4px;
+}
+
+.forecast-card .fc-temp {
+    font-size: 15px;
+    font-weight: 700;
+}
+
+/* ── Placeholder (initial state) ── */
+.placeholder {
+    text-align: center;
+    padding: 40px 0;
+    opacity: 0.6;
+}
+
+.placeholder .placeholder-icon {
+    font-size: 56px;
+    margin-bottom: 12px;
+}
+
+.placeholder p {
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+/* ── Responsive ── */
+@media (max-width: 480px) {
+    .app {
+        padding: 12px;
+    }
+
+    .card {
+        padding: 24px 20px;
+        border-radius: 22px;
+    }
+
+    .temperature {
+        font-size: 64px;
+    }
+
+    .weather-icon {
+        font-size: 56px;
+    }
+
+    .forecast-card {
+        padding: 10px 4px;
+    }
+
+    .forecast-card .fc-icon {
+        font-size: 20px;
+    }
+
+    .stat-card .stat-value {
+        font-size: 17px;
+    }
+}
